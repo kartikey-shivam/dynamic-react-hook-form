@@ -85,7 +85,7 @@ export default function Form() {
             case "text":
               return (
                 <div className={styles.text}>
-                  <label htmlFor={key} className={styles.text_label}>
+                  <label htmlFor={key} className={styles.label}>
                     {value.placeholder}
                   </label>
                   <input
@@ -93,6 +93,7 @@ export default function Form() {
                     defaultValue={value.defaultValue}
                     placeholder={value.placeholder}
                     type="text"
+                    className={styles.input}
                   />
                 </div>
               )
@@ -100,7 +101,13 @@ export default function Form() {
               return value?.options?.map((item) => {
                 return (
                   <div className={styles.radio}>
-                    <input type="radio" value={item} {...register(value.label)} id={item} />
+                    <input
+                      type="radio"
+                      value={item}
+                      {...register(value.label)}
+                      id={item}
+                      className={styles.input}
+                    />
                     <label htmlFor={item}>{item}</label>
                   </div>
                 )
@@ -120,7 +127,12 @@ export default function Form() {
             case "checkbox":
               return (
                 <div className={styles.checkbox}>
-                  <input type="checkbox" id={key} {...register(value.label)} />
+                  <input
+                    type="checkbox"
+                    id={key}
+                    {...register(value.label)}
+                    className={styles.input}
+                  />
                   <label htmlFor={value.label}>{value.checkboxLabel}</label>
                 </div>
               )
@@ -128,7 +140,7 @@ export default function Form() {
               return <p>default</p>
           }
         })}
-        <input type="submit" />
+        <input type="submit" className={styles.input} />
       </form>
     </>
   )

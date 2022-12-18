@@ -25,3 +25,7 @@
   justify-content: center;
   margin: 1rem;
 }
+.input {
+  padding: 0.2rem;
+  cursor: pointer;
+}
