@@ -1,5 +1,7 @@
 import React from "react"
 import { useForm, useFieldArray, useWatch } from "react-hook-form"
+import styles from "../styles/Home.module.css"
+
 interface IFormData {
   [key: string]: {
     label: string
@@ -76,30 +78,36 @@ export default function Form() {
           flexDirection: "column",
           justifyContent: "start",
         }}
+        className={styles.container}
       >
         {Object.entries(formData).map(([key, value]) => {
           switch (formData[key].type) {
             case "text":
               return (
-                <input
-                  {...register(key)}
-                  defaultValue={value.defaultValue}
-                  placeholder={value.placeholder}
-                  type="text"
-                />
+                <div className={styles.text}>
+                  <label htmlFor={key} className={styles.text_label}>
+                    {value.placeholder}
+                  </label>
+                  <input
+                    {...register(key)}
+                    defaultValue={value.defaultValue}
+                    placeholder={value.placeholder}
+                    type="text"
+                  />
+                </div>
               )
             case "radio":
               return value?.options?.map((item) => {
                 return (
-                  <>
+                  <div className={styles.radio}>
                     <input type="radio" value={item} {...register(value.label)} id={item} />
                     <label htmlFor={item}>{item}</label>
-                  </>
+                  </div>
                 )
               })
             case "dropdown":
               return (
-                <>
+                <div className={styles.dropdown}>
                   <label htmlFor={value.label}>{value.label}</label>
 
                   <select id={key} {...register(key)}>
@@ -107,14 +115,14 @@ export default function Form() {
                       return <option value={item}>{item}</option>
                     })}
                   </select>
-                </>
+                </div>
               )
             case "checkbox":
               return (
-                <>
+                <div className={styles.checkbox}>
                   <input type="checkbox" id={key} {...register(value.label)} />
                   <label htmlFor={value.label}>{value.checkboxLabel}</label>
-                </>
+                </div>
               )
             default:
               return <p>default</p>
