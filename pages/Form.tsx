@@ -7,7 +7,7 @@ const Price = ({ control, index }: any) => {
     name: `items[${index}]`,
     defaultValue: {},
   });
-  return (value.type || 0) * (value.amount || 0);
+  return <span>{(value.type || 0) * (value.amount || 0)}</span>;
 };
 
 const PriceTotal = ({ control }: any) => {
