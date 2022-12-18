@@ -30,7 +30,7 @@ export default function Form() {
 
   return (
     <form onSubmit={handleSubmit(console.log)}>
-      {fields.map(({ id, name, type, amount }, index) => {
+      {fields.map(({ id, name, type, amount }: any, index) => {
         return (
           <div key={id}>
             <input
