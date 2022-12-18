@@ -1,72 +1,127 @@
-import React from "react";
-import { useForm, useFieldArray, useWatch } from "react-hook-form";
-
-const Price = ({ control, index }: any) => {
-  const value = useWatch({
-    control,
-    name: `items[${index}]`,
-    defaultValue: {},
-  });
-  return <span>{(value.type || 0) * (value.amount || 0)}</span>;
-};
-
-const PriceTotal = ({ control }: any) => {
-  const value = useWatch({
-    control,
-    name: `items`,
-    defaultValue: {},
-  });
-
-  console.log(value);
-  return null;
-};
-
+import React from "react"
+import { useForm, useFieldArray, useWatch } from "react-hook-form"
+interface IFormData {
+  [key: string]: {
+    label: string
+    type: string
+    options?: string[]
+    placeholder?: string
+    defaultValue: string
+    rules: {
+      required: boolean
+    }
+    checkboxLabel?: string
+  }
+}
+const formData: IFormData = {
+  firstName: {
+    label: "First Name",
+    type: "text",
+    placeholder: "Enter your first name",
+    defaultValue: "",
+    rules: {
+      required: true,
+    },
+  },
+  lastName: {
+    label: "Last Name",
+    type: "text",
+    placeholder: "Enter your last name",
+    defaultValue: "",
+    rules: {
+      required: true,
+    },
+  },
+  gender: {
+    label: "Gender",
+    type: "radio",
+    options: ["male", "female"],
+    defaultValue: "",
+    rules: {
+      required: true,
+    },
+  },
+  profession: {
+    label: "Profession",
+    type: "dropdown",
+    options: ["Front-end Developer", "Back-end Developer", "Devops Engineer"],
+    defaultValue: "",
+    rules: {
+      required: true,
+    },
+  },
+  agree: {
+    type: "checkbox",
+    label: "",
+    checkboxLabel: "I hereby agree to the terms.",
+    defaultValue: "false",
+    rules: {
+      required: true,
+    },
+  },
+}
 export default function Form() {
-  const { register, control, handleSubmit } = useForm();
+  const { register, control, handleSubmit } = useForm()
   const { fields, append, remove } = useFieldArray({
     control,
     name: "items",
-  });
+  })
 
   return (
-    <form onSubmit={handleSubmit(console.log)}>
-      {fields.map(({ id, name, type, amount }: any, index) => {
-        return (
-          <div key={id}>
-            <input
-              ref={register()}
-              name={`items[${index}].name`}
-              defaultValue={name}
-            />
-            <select
-              ref={register()}
-              name={`items[${index}].type`}
-              defaultValue={type}
-            >
-              <option value="">Select</option>
-              <option value="10">ItemA</option>
-              <option value="20">ItemB</option>
-            </select>
-            <input
-              ref={register()}
-              type="number"
-              name={`items[${index}].amount`}
-              defaultValue={amount}
-            />
-            <Price control={control} index={index} />
+    <>
+      <form
+        onSubmit={handleSubmit(console.log)}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "start",
+        }}
+      >
+        {Object.entries(formData).map(([key, value]) => {
+          switch (formData[key].type) {
+            case "text":
+              return (
+                <input
+                  {...register(key)}
+                  defaultValue={value.defaultValue}
+                  placeholder={value.placeholder}
+                  type="text"
+                />
+              )
+            case "radio":
+              return value?.options?.map((item) => {
+                return (
+                  <>
+                    <input type="radio" value={item} {...register(value.label)} id={item} />
+                    <label htmlFor={item}>{item}</label>
+                  </>
+                )
+              })
+            case "dropdown":
+              return (
+                <>
+                  <label htmlFor={value.label}>{value.label}</label>
 
-            <button type="button" onClick={() => remove(index)}>
-              Remove
-            </button>
-          </div>
-        );
-      })}
-
-      <input type="submit" />
-      <button type="button" onClick={() => append({})}>
-        Append
-      </button>
-      <PriceTotal control={control} />
-    </form>
-  );
+                  <select id={key} {...register(key)}>
+                    {value?.options?.map((item) => {
+                      return <option value={item}>{item}</option>
+                    })}
+                  </select>
+                </>
+              )
+            // case "checkbox":
+            //   return (
+            //     <>
+            //       <input type="checkbox" id={key} {...register(value.label)} />
+            //       <label htmlFor={key}>{value.checkboxLabel}</label>
+            //     </>
+            //   )
+            default:
+              return <p>default</p>
+          }
+        })}
+        <input type="submit" />
+      </form>
+    </>
+  )
 }
