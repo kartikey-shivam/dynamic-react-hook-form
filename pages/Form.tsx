@@ -81,12 +81,15 @@ export default function Form() {
           switch (formData[key].type) {
             case "text":
               return (
-                <input
-                  {...register(key)}
-                  defaultValue={value.defaultValue}
-                  placeholder={value.placeholder}
-                  type="text"
-                />
+                <>
+                  <label htmlFor={key}>{value.placeholder}</label>
+                  <input
+                    {...register(key)}
+                    defaultValue={value.defaultValue}
+                    placeholder={value.placeholder}
+                    type="text"
+                  />
+                </>
               )
             case "radio":
               return value?.options?.map((item) => {
