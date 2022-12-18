@@ -52,7 +52,7 @@ const formData: IFormData = {
   },
   agree: {
     type: "checkbox",
-    label: "",
+    label: "Agree",
     checkboxLabel: "I hereby agree to the terms.",
     defaultValue: "false",
     rules: {
@@ -109,13 +109,13 @@ export default function Form() {
                   </select>
                 </>
               )
-            // case "checkbox":
-            //   return (
-            //     <>
-            //       <input type="checkbox" id={key} {...register(value.label)} />
-            //       <label htmlFor={key}>{value.checkboxLabel}</label>
-            //     </>
-            //   )
+            case "checkbox":
+              return (
+                <>
+                  <input type="checkbox" id={key} {...register(value.label)} />
+                  <label htmlFor={value.label}>{value.checkboxLabel}</label>
+                </>
+              )
             default:
               return <p>default</p>
           }
