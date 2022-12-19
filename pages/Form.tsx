@@ -1,6 +1,8 @@
 import React from "react"
 import { useForm, useFieldArray, useWatch } from "react-hook-form"
 import styles from "../styles/Home.module.css"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
 
 interface IFormData {
   [key: string]: {
@@ -15,6 +17,13 @@ interface IFormData {
     checkboxLabel?: string
   }
 }
+const schema = yup.object({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  gender: yup.string(),
+  profession: yup.string(),
+  agree: yup.boolean().required(),
+})
 const formData: IFormData = {
   firstName: {
     label: "First Name",
@@ -63,12 +72,19 @@ const formData: IFormData = {
   },
 }
 export default function Form() {
-  const { register, control, handleSubmit } = useForm()
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  })
   const { fields, append, remove } = useFieldArray({
     control,
     name: "items",
   })
-
+  console.log(errors)
   return (
     <>
       <form
@@ -86,15 +102,18 @@ export default function Form() {
               return (
                 <div className={styles.text}>
                   <label htmlFor={key} className={styles.label}>
-                    {value.placeholder}
+                    {value.label}
                   </label>
-                  <input
-                    {...register(key)}
-                    defaultValue={value.defaultValue}
-                    placeholder={value.placeholder}
-                    type="text"
-                    className={styles.input}
-                  />
+                  <div className={styles.input_con}>
+                    <input
+                      {...register(key)}
+                      defaultValue={value.defaultValue}
+                      placeholder={value.placeholder}
+                      type="text"
+                      className={styles.input}
+                    />
+                    <span className={styles.span}>{}</span>
+                  </div>
                 </div>
               )
             case "radio":
