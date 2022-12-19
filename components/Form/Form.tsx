@@ -50,20 +50,24 @@ export default function Form({ formData }: IFormData) {
                   <label htmlFor={key} className={styles.label}>
                     {value.placeholder}
                   </label>
-                  <input
-                    {...register(key, {
-                      required: value.rules.required,
-                      // maxLength: value.rules.maxLength?value.rules.maxLength:null,
-                      ...(value.rules.maxLength && { maxLength: value.rules.maxLength }),
-                    })}
-                    defaultValue={value.defaultValue}
-                    placeholder={value.placeholder}
-                    type="text"
-                    className={styles.input}
-                    aria-invalid={errors[key] ? "true" : "false"}
-                  />
-                  {errors[key]?.type === "required" && <p role="alert">{key} is required</p>}
-                  {errors[key]?.type === "maxLength" && <p role="alert">{key} is maxLength</p>}
+                  <div className={styles.input_con}>
+                    <input
+                      {...register(key, {
+                        required: value.rules.required,
+                        // maxLength: value.rules.maxLength?value.rules.maxLength:null,
+                        ...(value.rules.maxLength && { maxLength: value.rules.maxLength }),
+                      })}
+                      defaultValue={value.defaultValue}
+                      placeholder={value.placeholder}
+                      type="text"
+                      className={styles.input}
+                      aria-invalid={errors[key] ? "true" : "false"}
+                    />
+                    <span className={styles.span}>
+                      {errors[key]?.type === "required" && <p role="alert">{key} is required</p>}
+                      {errors[key]?.type === "maxLength" && <p role="alert">{key} is maxLength</p>}
+                    </span>
+                  </div>
                 </div>
               )
             case "radio":
@@ -95,14 +99,19 @@ export default function Form({ formData }: IFormData) {
               )
             case "checkbox":
               return (
-                <div className={styles.checkbox}>
-                  <input
-                    type="checkbox"
-                    id={key}
-                    {...register(value.label)}
-                    className={styles.input}
-                  />
-                  <label htmlFor={value.label}>{value.checkboxLabel}</label>
+                <div className={styles.input_con}>
+                  <div className={styles.checkbox}>
+                    <input
+                      type="checkbox"
+                      id={key}
+                      {...register(value.label)}
+                      className={styles.input}
+                    />
+                    <label htmlFor={value.label}>{value.checkboxLabel}</label>
+                  </div>
+                  <span className={styles.span}>
+                    {errors[key]?.type === "required" && <p role="alert">{key} is required</p>}
+                  </span>
                 </div>
               )
             default:

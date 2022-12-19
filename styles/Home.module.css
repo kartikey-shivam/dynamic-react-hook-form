@@ -29,3 +29,12 @@
   padding: 0.2rem;
   cursor: pointer;
 }
+.input_con {
+  display: flex;
+  flex-direction: column;
+}
+.span {
+  font-size: 0.8rem;
+  color: red;
+  padding: 0.2rem;
+}
