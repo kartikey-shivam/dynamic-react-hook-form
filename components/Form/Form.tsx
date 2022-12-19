@@ -1,69 +1,31 @@
 import React from "react"
 import { useForm, useFieldArray, useWatch } from "react-hook-form"
-import styles from "../styles/Home.module.css"
+import styles from "../../styles/Home.module.css"
 
 interface IFormData {
-  [key: string]: {
-    label: string
-    type: string
-    options?: string[]
-    placeholder?: string
-    defaultValue: string
-    rules: {
-      required: boolean
+  formData: {
+    [key: string]: {
+      label: string
+      type: string
+      options?: string[]
+      placeholder?: string
+      defaultValue: string
+      rules: {
+        required: boolean
+        maxLenth?: number
+      }
+      checkboxLabel?: string
     }
-    checkboxLabel?: string
   }
 }
-const formData: IFormData = {
-  firstName: {
-    label: "First Name",
-    type: "text",
-    placeholder: "Enter your first name",
-    defaultValue: "",
-    rules: {
-      required: true,
-    },
-  },
-  lastName: {
-    label: "Last Name",
-    type: "text",
-    placeholder: "Enter your last name",
-    defaultValue: "",
-    rules: {
-      required: true,
-    },
-  },
-  gender: {
-    label: "Gender",
-    type: "radio",
-    options: ["male", "female"],
-    defaultValue: "",
-    rules: {
-      required: true,
-    },
-  },
-  profession: {
-    label: "Profession",
-    type: "dropdown",
-    options: ["Front-end Developer", "Back-end Developer", "Devops Engineer"],
-    defaultValue: "",
-    rules: {
-      required: true,
-    },
-  },
-  agree: {
-    type: "checkbox",
-    label: "Agree",
-    checkboxLabel: "I hereby agree to the terms.",
-    defaultValue: "false",
-    rules: {
-      required: true,
-    },
-  },
-}
-export default function Form() {
-  const { register, control, handleSubmit } = useForm()
+
+export default function Form({ formData }: IFormData) {
+  const {
+    register,
+    formState: { errors },
+    control,
+    handleSubmit,
+  } = useForm()
   const { fields, append, remove } = useFieldArray({
     control,
     name: "items",
@@ -89,26 +51,33 @@ export default function Form() {
                     {value.placeholder}
                   </label>
                   <input
-                    {...register(key)}
+                    {...register(key, {
+                      required: value.rules.required,
+                      // maxLength: value.rules.maxLength?value.rules.maxLength:null,
+                      // ...(value.rules.maxLenth && { maxLength: value.rules.maxLength }),
+                    })}
                     defaultValue={value.defaultValue}
                     placeholder={value.placeholder}
                     type="text"
                     className={styles.input}
+                    aria-invalid={errors[key] ? "true" : "false"}
                   />
+                  {errors[key]?.type === "required" && <p role="alert">{key} is required</p>}
+                  {errors[key]?.type === "maxLength" && <p role="alert">{key} is maxLength</p>}
                 </div>
               )
             case "radio":
               return value?.options?.map((item) => {
                 return (
                   <div className={styles.radio}>
+                    <label htmlFor={item}>{item}</label>
                     <input
                       type="radio"
                       value={item}
-                      {...register(value.label)}
+                      {...register(value.label, { required: value.rules.required })}
                       id={item}
                       className={styles.input}
                     />
-                    <label htmlFor={item}>{item}</label>
                   </div>
                 )
               })
