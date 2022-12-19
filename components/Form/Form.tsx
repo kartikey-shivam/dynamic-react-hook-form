@@ -12,7 +12,7 @@ interface IFormData {
       defaultValue: string
       rules: {
         required: boolean
-        maxLenth?: number
+        maxLength?: number
       }
       checkboxLabel?: string
     }
@@ -54,7 +54,7 @@ export default function Form({ formData }: IFormData) {
                     {...register(key, {
                       required: value.rules.required,
                       // maxLength: value.rules.maxLength?value.rules.maxLength:null,
-                      // ...(value.rules.maxLenth && { maxLength: value.rules.maxLength }),
+                      ...(value.rules.maxLength && { maxLength: value.rules.maxLength }),
                     })}
                     defaultValue={value.defaultValue}
                     placeholder={value.placeholder}
